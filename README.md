@@ -1,6 +1,2 @@
-# Описание репозитория
-Это репозиторий для домашних заданий по курсу OTUS Python-Basic
-
-# Обо мне
-Меня зовут Регина, работаю Data QA, знаю SQL, а с Python пока что знакома посредственно, но планирую это исправить:) 
- 
+# About 
+I'm Regina, Data QA Engineer (SQL). These are my first steps in Python within OTUS python basics course. 
