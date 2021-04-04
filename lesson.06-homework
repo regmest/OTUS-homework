@@ -1,0 +1,70 @@
+# Создать класс User со следующими атрибутами:
+# имя, фамилия, почтовый адрес, мобильный номер, пароль, животные
+# Создать геттер и сеттер для пароля.
+# Создайте класс Pet и добавьте к нему следующие атрибуты:
+# кличка, порода, год рождения, хозяин (User)
+# Добавьте список из Pet как атрибут экземпляра для User.
+# Создайте несколько экземпляров класса User, добавьте к юзерам 1-4 домашних животных
+
+
+class User:
+
+    def __init__(self, name, surname, email, phone_number, password, pets=[]):
+        self.name = name
+        self.surname = surname
+        self.email = email
+        self.phone_number = phone_number
+        self.__password = password
+        self.pets = pets
+
+    def __str__(self):
+        return f"{self.__class__.__name__}: name = {self.name}, surname = {self.surname}, email = {self.email}, " \
+               f"phone_number = {self.phone_number}, pets = {self.pets}"
+
+    @property
+    def password(self):
+        return self.password
+
+    @password.setter
+    def password(self, new_password):
+        self.__password = new_password
+
+    @password.getter
+    def password(self):
+        return self.password
+
+
+class Pet:
+
+    def __init__(self, name, breed, birth_year, owner=None):
+        self.name = name
+        self.breed = breed
+        self.birth_year = birth_year
+        self.owner = owner
+
+    def __str__(self):
+        return f"{self.__class__.__name__}: name = {self.name}, breed = {self.breed}, birth_year = {self.birth_year}" \
+               f", owner = {self.owner}"
+
+    def __repr__(self):
+        return f"{self.__class__.__name__}: name = {self.name}, breed = {self.breed}, birth_year = {self.birth_year}" \
+               f", owner = {self.owner}"
+
+
+owner1 = User("Zara", "Maxwell", "zara@gmail.com", "12345", "1111")
+print(owner1)
+pet1 = Pet("Fluffy", "Collie", "2020", owner1)
+print(pet1)
+owner1.pets.append(pet1)
+print(owner1.pets)
+
+# # чтение пароля
+# print(owner1.password)
+# # смена пароля
+# owner1.password = "0000"
+
+
+
+
+
+
