@@ -3,7 +3,9 @@
 """
 
 # from base import Vehicle
+# from engine import Engine
 from homework_02.base import Vehicle
+from homework_02.engine import Engine
 
 
 class Car(Vehicle):
@@ -13,6 +15,7 @@ class Car(Vehicle):
         self.engine = None
 
     def set_engine(self, engine):
-        if engine.__class__.__name__ == 'Engine':
+        if isinstance(engine, Engine):
             self.engine = engine
+
 
