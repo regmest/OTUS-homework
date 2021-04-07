@@ -20,7 +20,7 @@ class Vehicle(ABC):
 
     def move(self, distance):
         if distance * self.fuel_consumption > self.fuel:  # проверяем, что топлива достаточно
-            raise NotEnoughFuel()
+            raise NotEnoughFuel
         else:
             self.fuel = self.fuel - distance * self.fuel_consumption  # остаток топлива
 
