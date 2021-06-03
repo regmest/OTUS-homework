@@ -25,7 +25,7 @@ from sqlalchemy.orm import (
     sessionmaker
 )
 
-PG_CONN_URI = os.environ.get("SQLALCHEMY_PG_CONN_URI") or "postgresql+asyncpg://postgres:password@localhost/postgres"
+PG_CONN_URI = os.environ.get("SQLALCHEMY_PG_CONN_URI") # or "postgresql+asyncpg://postgres:password@localhost/postgres"
 
 # подключаем БД
 engine = create_async_engine(PG_CONN_URI, echo=True)
@@ -33,8 +33,7 @@ engine = create_async_engine(PG_CONN_URI, echo=True)
 # создаем базовый класс для моделей
 Base = declarative_base(bind=engine)
 
-
-async_session = sessionmaker(engine, class_=AsyncSession)
+async_session = sessionmaker(engine, class_=AsyncSession, expire_on_commit=False )
 
 
 class User(Base):
