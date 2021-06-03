@@ -34,9 +34,7 @@ async def add_user_item(data):
         session: AsyncSession
 
         async with session.begin():
-            logger.info("Starting to add users")
             session.add(User(**user_data) for user_data in data)
-            logger.info("Finishing to add users")
 
     logger.info("Finishing to add user data into user table")
 
@@ -58,12 +56,14 @@ async def async_main():
 
     await create_tables()
     user_data, post_data = await get_all_data()
-    coros = [
-        add_user_item(user_data),
-        add_post_item(post_data)
-    ]
-    coro = asyncio.wait({asyncio.create_task(coro) for coro in coros})
-    await coro
+    await add_user_item(user_data)
+    await add_post_item(post_data)
+    # coros = [
+    #     add_user_item(user_data),
+    #     add_post_item(post_data)
+    # ]
+    # coro = asyncio.wait({asyncio.create_task(coro) for coro in coros})
+    # await coro
     logger.info("Finishing async_main")
 
 
