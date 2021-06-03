@@ -27,7 +27,7 @@ from sqlalchemy.orm import (
 
 PG_CONN_URI = os.environ.get("SQLALCHEMY_PG_CONN_URI") # or "postgresql+asyncpg://postgres:password@localhost/postgres"
 engine = create_async_engine(PG_CONN_URI, echo=True)
-Base = declarative_base(bind=engine)
+Base = declarative_base()
 async_session = sessionmaker(engine, class_=AsyncSession, expire_on_commit=False )
 
 
@@ -35,10 +35,10 @@ class User(Base):
     __tablename__ = "users"
     id = Column(Integer, primary_key=True)
     name = Column(String(32))
-    username = Column(String(32), unique=True, nullable=False)
-    email = Column(String(32), unique=True)
+    username = Column(String(32))#, unique=True, nullable=False)
+    email = Column(String(32))#, unique=True)
     city = Column(String(32))
-    phone = Column(String(32), unique=True)
+    phone = Column(String(32))#, unique=True)
     # created_at = Column(DateTime, nullable=False, default=datetime.utcnow, server_default=func.now())
 
     # __mapper_args__ = {"eager_defaults": True}
