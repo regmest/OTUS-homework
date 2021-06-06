@@ -28,7 +28,6 @@ from sqlalchemy.orm import (
 
 
 PG_CONN_URI = os.environ.get("SQLALCHEMY_PG_CONN_URI") or "postgresql+asyncpg://postgres:password@localhost/postgres"
-# PG_CONN_URI = "postgresql+asyncpg://postgres:password@localhost/postgres"
 
 engine = create_async_engine(PG_CONN_URI, echo=True)
 Base = declarative_base()
@@ -43,6 +42,7 @@ async_session = sessionmaker(engine, class_=AsyncSession, expire_on_commit=False
 # async_session = sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)
 # ------------------------------------------
 
+
 class User(Base):
     __tablename__ = "users"
     id = Column(Integer, primary_key=True)
@@ -55,7 +55,7 @@ class User(Base):
 
     __mapper_args__ = {"eager_defaults": True}
 
-    post = relationship("Post", back_populates="user")
+    posts = relationship("Post", back_populates="user")
 
     def __str__(self):
         return f"{self.__class__.__name__} (id={self.id}, username={self.username}, name={self.name}," \
@@ -75,7 +75,7 @@ class Post(Base):
 
     __mapper_args__ = {"eager_defaults": True}
 
-    user = relationship(User, back_populates="post")
+    user = relationship(User, back_populates="posts")
 
     def __str__(self):
         return f"{self.__class__.__name__} (id={self.id}, user_id={self.user_id}, title={self.title}, body={self.body}"

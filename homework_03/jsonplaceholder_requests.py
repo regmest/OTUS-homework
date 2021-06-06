@@ -64,7 +64,7 @@ async def get_all_data():
     await asyncio.sleep(0.1)  # чтобы обойти баг на windows https://github.com/encode/httpx/issues/914
     # Была ошибка: RuntimeError: Event loop is closed
 
-    logger.info("USER DATA: {}, POST DATA: {}", user_data, post_data)
+    # logger.info("USER DATA: {}, POST DATA: {}", user_data, post_data)
     logger.info("Finished to gather data from services")
     return user_data, post_data
 

@@ -16,7 +16,7 @@
 # -*- coding: utf8 -*-
 
 import asyncio
-from models import Base, engine, User, Post, async_session  # , conn
+from models import Base, engine, User, Post, async_session #, conn
 from sqlalchemy.ext.asyncio import AsyncSession
 from loguru import logger
 from jsonplaceholder_requests import get_all_data
@@ -60,14 +60,34 @@ async def add_post_item(data):
 
         async with session.begin():
             for post_data in data:
-                # logger.info("Starting to add this post data: {}", post_data)
+
+                logger.info("Finding user for this post")
+                # post_owner: User = await session.select(User).filter_by(id=post_data["userId"]).one()
+
+                stmt = session.query(User).filter_by(id=post_data["userId"]).one()
+                # stmt = session.select(User).filter(id=post_data["userId"]).one()
+                # stmt = session.select(User).where(id=post_data["userId"]).one()
+                post_owner = await session.execute(stmt)
+
+                # -----------------------
+                # AttributeError: 'AsyncSession' object has no attribute 'query'
+                # -----------------------
+
+
+                logger.info("This post owner is:{}", post_owner)
+
+                logger.info("Starting to add user's post data: {}", post_data)
                 post = Post(
                     userId=post_data["userId"],
                     id=post_data["id"],
                     title=post_data["title"],
-                    body=post_data["body"]
+                    body=post_data["body"],
+                    user=post_owner
                     )
                 session.add(post)
+                logger.info("Added post {} for user {}", post.id, post.user)
+
+                await session.refresh(post_owner)
 
     logger.info("Finishing to add post data into post table")
 
@@ -76,21 +96,20 @@ async def async_main():
     logger.info("Starting async_main")
     await create_tables()
     user_data, post_data = await get_all_data()
-    # await add_user_item(user_data)
-    # await add_post_item(post_data)
-    coros = [
-        add_user_item(user_data),
-        add_post_item(post_data)
-    ]
-    coro = asyncio.wait({asyncio.create_task(coro) for coro in coros})
-    await coro
+
+    await add_user_item(user_data)
+    await add_post_item(post_data)
+
+    # coros = [
+    #     add_user_item(user_data),
+    #     add_post_item(post_data)
+    # ]
+    # coro = asyncio.wait({asyncio.create_task(coro) for coro in coros})
+    # await coro
 
     # logger.info("Closing PG connection")
     # conn.close()
     # logger.info("CONNECTION INFO: {}", conn)
-
-    # await asyncio.sleep(0.1)  # чтобы обойти баг на windows https://github.com/encode/httpx/issues/914
-    # # Была ошибка: RuntimeError: Event loop is closed
 
     logger.info("Finishing async_main")
 
