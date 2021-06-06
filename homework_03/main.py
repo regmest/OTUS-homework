@@ -16,8 +16,10 @@
 # -*- coding: utf8 -*-
 
 import asyncio
-from models import Base, engine, User, Post, async_session #, conn
+from models import Base, engine, User, Post, async_session  # , conn
 from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy import select
+from sqlalchemy.orm import subqueryload
 from loguru import logger
 from jsonplaceholder_requests import get_all_data
 
@@ -62,19 +64,15 @@ async def add_post_item(data):
             for post_data in data:
 
                 logger.info("Finding user for this post")
-                # post_owner: User = await session.select(User).filter_by(id=post_data["userId"]).one()
-
-                stmt = session.query(User).filter_by(id=post_data["userId"]).one()
-                # stmt = session.select(User).filter(id=post_data["userId"]).one()
-                # stmt = session.select(User).where(id=post_data["userId"]).one()
-                post_owner = await session.execute(stmt)
-
-                # -----------------------
-                # AttributeError: 'AsyncSession' object has no attribute 'query'
-                # -----------------------
-
-
-                logger.info("This post owner is:{}", post_owner)
+                post_owner = await session.execute(
+                    select(User)
+                    .options(
+                        subqueryload(User.posts)
+                        )
+                    .filter_by(id=post_data["userId"])
+                )
+                user = post_owner.scalar_one_or_none()
+                logger.info("This post owner is: {}", user)
 
                 logger.info("Starting to add user's post data: {}", post_data)
                 post = Post(
@@ -82,12 +80,12 @@ async def add_post_item(data):
                     id=post_data["id"],
                     title=post_data["title"],
                     body=post_data["body"],
-                    user=post_owner
+                    user=user
                     )
                 session.add(post)
-                logger.info("Added post {} for user {}", post.id, post.user)
+                logger.info("Added post {} for user {}", post.id, post.user.id)
 
-                await session.refresh(post_owner)
+                await session.refresh(user)
 
     logger.info("Finishing to add post data into post table")
 
@@ -100,16 +98,9 @@ async def async_main():
     await add_user_item(user_data)
     await add_post_item(post_data)
 
-    # coros = [
-    #     add_user_item(user_data),
-    #     add_post_item(post_data)
-    # ]
-    # coro = asyncio.wait({asyncio.create_task(coro) for coro in coros})
-    # await coro
-
-    # logger.info("Closing PG connection")
-    # conn.close()
-    # logger.info("CONNECTION INFO: {}", conn)
+    logger.info("Closing PG connection")
+    conn.close()
+    logger.info("CONNECTION INFO: {}", conn)
 
     logger.info("Finishing async_main")
 

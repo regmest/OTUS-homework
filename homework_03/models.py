@@ -78,7 +78,7 @@ class Post(Base):
     user = relationship(User, back_populates="posts")
 
     def __str__(self):
-        return f"{self.__class__.__name__} (id={self.id}, user_id={self.user_id}, title={self.title}, body={self.body}"
+        return f"{self.__class__.__name__} (id={self.id}, userId={self.userId}, title={self.title}, body={self.body}"
 
     def __repr__(self):
         return str(self)
