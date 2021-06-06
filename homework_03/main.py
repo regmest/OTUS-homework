@@ -98,9 +98,9 @@ async def async_main():
     await add_user_item(user_data)
     await add_post_item(post_data)
 
-    logger.info("Closing PG connection")
-    conn.close()
-    logger.info("CONNECTION INFO: {}", conn)
+    # logger.info("Closing PG connection")
+    # conn.close()
+    # logger.info("CONNECTION INFO: {}", conn)
 
     logger.info("Finishing async_main")
 
