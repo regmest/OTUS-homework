@@ -8,7 +8,7 @@
 создайте связи relationship между моделями: User.posts и Post.user
 """
 
-# import os
+import os
 # import psycopg2
 from datetime import datetime
 from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession
@@ -27,9 +27,8 @@ from sqlalchemy.orm import (
 )
 
 
-# PG_CONN_URI = os.environ.get("SQLALCHEMY_PG_CONN_URI")
-
-PG_CONN_URI = "postgresql+asyncpg://postgres:password@localhost/postgres"  #  "postgresql+asyncpg://postgres:secretpassword@localhost:5432/postgres"
+PG_CONN_URI = os.environ.get("SQLALCHEMY_PG_CONN_URI") or "postgresql+asyncpg://postgres:password@localhost/postgres"
+# PG_CONN_URI = "postgresql+asyncpg://postgres:password@localhost/postgres"
 
 engine = create_async_engine(PG_CONN_URI, echo=True)
 Base = declarative_base()
