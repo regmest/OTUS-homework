@@ -67,7 +67,7 @@ class User(Base):
 
 class Post(Base):
     __tablename__ = "posts"
-    userId = Column(Integer, ForeignKey(User.id), nullable=False)
+    user_id = Column(Integer, ForeignKey(User.id), nullable=False)
     id = Column(Integer, primary_key=True)
     title = Column(String(1000), nullable=False, default="", server_default="")
     body = Column(String(5000), nullable=False, default="", server_default="")
@@ -78,7 +78,7 @@ class Post(Base):
     user = relationship(User, back_populates="posts")
 
     def __str__(self):
-        return f"{self.__class__.__name__} (id={self.id}, userId={self.userId}, title={self.title}, body={self.body}"
+        return f"{self.__class__.__name__} (id={self.id}, userId={self.user_id}, title={self.title}, body={self.body}"
 
     def __repr__(self):
         return str(self)

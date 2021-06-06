@@ -76,7 +76,7 @@ async def add_post_item(data):
 
                 logger.info("Starting to add user's post data: {}", post_data)
                 post = Post(
-                    userId=post_data["userId"],
+                    user_id=post_data["userId"],
                     id=post_data["id"],
                     title=post_data["title"],
                     body=post_data["body"],
