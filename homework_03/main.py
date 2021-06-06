@@ -16,7 +16,7 @@
 # -*- coding: utf8 -*-
 
 import asyncio
-from models import Base, engine, User, Post, async_session  # , conn
+from models import Base, engine, User, Post, Session  #, conn
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
 from sqlalchemy.orm import subqueryload
@@ -35,7 +35,7 @@ async def create_tables():
 async def add_user_item(data):
     logger.info("Starting to add user data into user table")
 
-    async with async_session() as session:
+    async with Session() as session:
         session: AsyncSession
 
         async with session.begin():
@@ -57,7 +57,7 @@ async def add_user_item(data):
 async def add_post_item(data):
     logger.info("Starting to add post data into post table")
 
-    async with async_session() as session:
+    async with Session() as session:
         session: AsyncSession
 
         async with session.begin():
@@ -97,7 +97,7 @@ async def async_main():
 
     await add_user_item(user_data)
     await add_post_item(post_data)
-
+    #
     # logger.info("Closing PG connection")
     # conn.close()
     # logger.info("CONNECTION INFO: {}", conn)
