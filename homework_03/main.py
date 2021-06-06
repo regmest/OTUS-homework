@@ -16,7 +16,7 @@
 # -*- coding: utf8 -*-
 
 import asyncio
-from models import Base, engine, User, Post, async_session, conn
+from models import Base, engine, User, Post, async_session  # , conn
 from sqlalchemy.ext.asyncio import AsyncSession
 from loguru import logger
 from jsonplaceholder_requests import get_all_data

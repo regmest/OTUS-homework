@@ -9,6 +9,7 @@
 """
 
 # import os
+# import psycopg2
 from datetime import datetime
 from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession
 from sqlalchemy import (
