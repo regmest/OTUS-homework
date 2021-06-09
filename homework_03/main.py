@@ -16,10 +16,8 @@
 # -*- coding: utf8 -*-
 
 import asyncio
-from models import Base, engine, User, Post, Session  #, conn
+from models import Base, engine, User, Post, Session  # , conn
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy import select
-from sqlalchemy.orm import subqueryload
 from loguru import logger
 from jsonplaceholder_requests import get_all_data
 
@@ -39,17 +37,20 @@ async def add_user_item(data):
         session: AsyncSession
 
         async with session.begin():
+            users_list = []
             for user_data in data:
-                # logger.info("Starting to add this user data: {}", user_data)
-                user = User(
-                    id=user_data["id"],
-                    name=user_data["name"],
-                    username=user_data["username"],
-                    email=user_data["email"],
-                    city=user_data["city"],
-                    phone=user_data["phone"],
-                    )
-                session.add(user)
+                users_list.append(
+                    User(
+                        id=user_data["id"],
+                        name=user_data["name"],
+                        username=user_data["username"],
+                        email=user_data["email"],
+                        city=user_data["city"],
+                        phone=user_data["phone"],
+                    ))
+            logger.info("Starting to add these users: {}", users_list)
+            session.add_all(users_list)
+            logger.info("Added all {} users", len(users_list))
 
     logger.info("Finishing to add user data into user table")
 
@@ -61,31 +62,18 @@ async def add_post_item(data):
         session: AsyncSession
 
         async with session.begin():
+            posts_list = []
             for post_data in data:
-
-                logger.info("Finding user for this post")
-                post_owner = await session.execute(
-                    select(User)
-                    .options(
-                        subqueryload(User.posts)
-                        )
-                    .filter_by(id=post_data["userId"])
-                )
-                user = post_owner.scalar_one_or_none()
-                logger.info("This post owner is: {}", user)
-
-                logger.info("Starting to add user's post data: {}", post_data)
-                post = Post(
-                    user_id=post_data["userId"],
-                    id=post_data["id"],
-                    title=post_data["title"],
-                    body=post_data["body"],
-                    user=user
-                    )
-                session.add(post)
-                logger.info("Added post {} for user {}", post.id, post.user.id)
-
-                await session.refresh(user)
+                posts_list.append(
+                    Post(
+                        user_id=post_data["userId"],
+                        id=post_data["id"],
+                        title=post_data["title"],
+                        body=post_data["body"]
+                    ))
+            logger.info("Starting to add these posts: {}", posts_list)
+            session.add_all(posts_list)
+            logger.info("Added all {} posts", len(posts_list))
 
     logger.info("Finishing to add post data into post table")
 
@@ -97,7 +85,7 @@ async def async_main():
 
     await add_user_item(user_data)
     await add_post_item(post_data)
-    #
+
     # logger.info("Closing PG connection")
     # conn.close()
     # logger.info("CONNECTION INFO: {}", conn)
@@ -113,4 +101,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
