@@ -7,7 +7,7 @@ RUN pip install -U pip setuptools
 COPY requirements.txt .
 RUN pip install -r requirements.txt
 
-COPY ./my_app .
+COPY . .
 
 ENV FLASK_ENV=development
 ENV FLASK_DEBUG=1

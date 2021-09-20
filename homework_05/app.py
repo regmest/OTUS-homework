@@ -1,5 +1,5 @@
 """
-Домашнее задание №4
+Домашнее задание №5
 Первое веб-приложение
 
 создайте базовое приложение на Flask
@@ -11,8 +11,9 @@
 в навигационную панель добавьте ссылки на главную страницу / и на страницу /about/ при помощи url_for
 """
 
+
 from flask import Flask, render_template
-from views.index import about_app
+from .views.index import about_app
 
 
 app = Flask(__name__)
