@@ -1,2 +1,9 @@
 # About 
-I'm Regina, Data QA Engineer (SQL). These are my first steps in Python within OTUS python basics course. 
+
+homework#3 - "Асинхронная работа с сетью и БД"
+
+homework#4 - "Первое веб-приложение"
+
+homework#5 - "Веб-приложение на Flask"
+
+homework#6 - "Взаимодействие между контейнерами"
