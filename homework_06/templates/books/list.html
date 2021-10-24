@@ -1,0 +1,20 @@
+{% extends 'books/base.html' %}
+
+{% block title %}
+  Books list
+{% endblock %}
+
+{% block body %}
+  <div>
+    <h3>Your books:</h3>
+    <ul>
+      {% for book in books %}
+        <li>
+          <a href="{{ url_for('books_app.details', book_id=book.id) }}">
+            {{ book.title }}, {{ book.author }} </a>
+          (added at {{ book.created_at }})
+        </li>
+      {% endfor %}
+    </ul>
+  </div>
+{% endblock %}
