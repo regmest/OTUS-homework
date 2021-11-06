@@ -1,8 +1,5 @@
-from django.core.exceptions import ValidationError
 from django.forms import ModelForm
-from django.template.defaultfilters import slugify
-
-from userprofile import models
+from skillprofile import models
 
 
 class SkillCreateForm(ModelForm):

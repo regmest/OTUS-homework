@@ -55,6 +55,7 @@ def add_book():
     book_author = request.form.get("book-author")
     if not book_title:
         raise BadRequest("Field 'Title' is required!")
+        # raise BadRequest("Field 'book-title' is required!")
     elif not book_author:
         raise BadRequest("Field 'Author' is required!")
 

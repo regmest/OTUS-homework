@@ -34,6 +34,10 @@ urlpatterns = [
     path('accounts/logout/', LogoutView.as_view(), name='logout'),
     path('accounts/registration/', UserCreateView.as_view(), name='user-registration'),
 
+    # user about
+    # path('<username>/details', userauth.views.UserDetail.as_view(), name='user-detail'),
+    # path('<username>'/update/', userauth.views.
+
     # skills list & details
     path('skills/', skillprofile.views.SkillList.as_view(), name='all-skills'),
     path('skills/create/', skillprofile.views.SkillCreate.as_view(), name='skill-create'),

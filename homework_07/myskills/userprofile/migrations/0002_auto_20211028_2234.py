@@ -7,7 +7,7 @@ import django.db.models.deletion
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('userprofile', '0001_initial'),
+        ('skillprofile', '0001_initial'),
     ]
 
     operations = [
@@ -22,7 +22,7 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='userskillprofile',
             name='user',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.PROTECT, to='userprofile.userinfo'),
+            field=models.ForeignKey(on_delete=django.db.models.deletion.PROTECT, to='skillprofile.userinfo'),
         ),
         migrations.DeleteModel(
             name='User',

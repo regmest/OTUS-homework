@@ -55,7 +55,7 @@ MIDDLEWARE = [
     'debug_toolbar.middleware.DebugToolbarMiddleware',
 ]
 
-ROOT_URLCONF = 'myskills.urls'
+ROOT_URLCONF = 'urls'
 
 TEMPLATES = [
     {

@@ -1,18 +1,7 @@
 from django.db import models
-from django.template.defaultfilters import slugify
-from django.urls import reverse
-from django.contrib.auth.models import User
 
 
-class UserInfo(models.Model):
-    created_at = models.DateTimeField(auto_now_add=True)
-    user = models.OneToOneField(User, on_delete=models.PROTECT, null=False)
-    about = models.TextField(null=True, blank=True)
-
-
-class SkillTag(models.Model):
-    created_at = models.DateTimeField(auto_now_add=True)
-    author_user = models.ForeignKey(User, on_delete=models.PROTECT, null=True)
+class Skill(models.Model):
     name = models.CharField(max_length=256, blank=False, null=False, unique=True)
     description = models.TextField(null=True, blank=True)
 
@@ -20,9 +9,23 @@ class SkillTag(models.Model):
         return self.name
 
 
-class Skill(models.Model):
-    class Meta:
-        unique_together = (("author_user", "name"),)
+class Direction(models.Model):
+    name = models.CharField(max_length=256, blank=False, null=False, unique=True)
+    description = models.TextField(null=True, blank=True)
+
+    def __str__(self):
+        return self.name
+
+
+class UserInfo(models.Model):
+    nickname = models.CharField(max_length=32, blank=False, null=False, unique=True)
+    about = models.TextField(null=True, blank=True)
+
+    def __str__(self):
+        return self.nickname
+
+
+class UserSkillProfile(models.Model):
 
     STATUS_CHOICES = [
         ("not started", "Not started"),
@@ -32,31 +35,21 @@ class Skill(models.Model):
         ("failed", "Failed")
     ]
 
-    created_at = models.DateTimeField(auto_now_add=True)
-    author_user = models.ForeignKey(User, on_delete=models.PROTECT,
-                                    null=True)  # TODO автор должен заполняться автоматически
-    name = models.CharField(max_length=256, blank=False, null=False)
-    status = models.CharField(null=False, blank=False, max_length=64, choices=STATUS_CHOICES,
-                              default=STATUS_CHOICES[0][0])
-    description = models.TextField(null=True, blank=True)
-    tag = models.ManyToManyField(SkillTag, blank=True, null=True)
-    slug = models.SlugField(null=False, unique=True)
-
-    # progress_percent = models.PositiveSmallIntegerField(null=True, blank=True)  # на будущее, когда будет добавлен расчет
+    user = models.ForeignKey(UserInfo, on_delete=models.PROTECT, blank=False, null=False)
+    skill = models.ForeignKey(Skill, on_delete=models.PROTECT, blank=False, null=False)
+    direction = models.ManyToManyField(Direction)
+    parent_skill = models.ForeignKey("self", on_delete=models.PROTECT, blank=True, null=True)
+    status = models.CharField(null=False, blank=False, max_length=64, choices=STATUS_CHOICES, default=STATUS_CHOICES[0][0])
+    progress_percent = models.PositiveSmallIntegerField(null=True, blank=True)
 
     def __str__(self):
-        return self.name
+        return self.skill.name
 
-    def tags(self):
-        return ", ".join([d.name for d in self.tag.all()])
+    def get_directions(self):
+        return ", ".join([d.name for d in self.direction.all()])
 
-    def get_general_details_url(self):
-        return reverse('skill-detail', kwargs={'slug': self.slug})
 
-    def get_user_details_url(self):
-        return reverse('user-skill-detail', kwargs={'slug': self.slug, 'username': self.author_user.username})
 
-    # def save(self, *args, **kwargs):
-    #     if not self.slug:
-    #         self.slug = slugify(str(self.name) + "-" + str(self.author_user))
-    #     return super().save(*args, **kwargs)
+
+
+
