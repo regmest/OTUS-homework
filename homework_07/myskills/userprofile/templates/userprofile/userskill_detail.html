@@ -1,10 +1,17 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>$Title$</title>
+    <meta charset="UTF-8">
+    <title>User skill details</title>
 </head>
 <body>
-$END$
+  <h1>{{ username }} skills: {{ object.name }}</h1>
+
+  <p> Status: {{ object.status }}</p>
+  <p> Description: {{ object.description }}</p>
+
+  <p><a href="{% url 'skill-update' object.slug %}">Edit</a></p>
+  <p><a href="{% url 'user-skills' username %}">Back to {{ username }}'s skills list</a></p>
+
 </body>
 </html>

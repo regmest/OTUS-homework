@@ -1,15 +1,17 @@
 from django.contrib import admin
-from .models import UserInfo, UserSkillProfile, Skill, Direction
+from .models import UserInfo, Skill, SkillTag
 
-
-class UserSkillProfileAdmin(admin.ModelAdmin):
-    class Meta:
-        model = UserSkillProfile
-    list_display = ('user', 'skill', 'get_directions', 'parent_skill', 'status', 'progress_percent')
-
-
-admin.site.register(UserSkillProfile, UserSkillProfileAdmin)
 
 admin.site.register(UserInfo)
-admin.site.register(Skill)
-admin.site.register(Direction)
+
+
+class SkillAdmin(admin.ModelAdmin):
+    class Meta:
+        model = Skill
+    list_display = ('author_user', 'name', 'status', 'description', 'tags', 'slug')
+    prepopulated_fields = {'slug': ('name',)}
+
+
+admin.site.register(Skill, SkillAdmin)
+
+admin.site.register(SkillTag)
