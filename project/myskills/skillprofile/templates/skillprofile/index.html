@@ -8,17 +8,19 @@
 <div>
     {% if user.is_authenticated %}
     <p>
-        Welcome, {{ user.username }}.
-        <a href="{% url 'logout' %}">Выход</a>
+        Hello, {{ user.username|default:'Guest' }}!
+        <a href="{% url 'logout' %}">Log out</a>
+        <a href="{% url 'password-change' %}">Change password</a>
     </p>
     {% else %}
     <p>
         Welcome, please log in.
-        <a href="{% url 'login' %}">Вход</a>
-        <a href="{% url 'user-registration' %}">Зарегистрироваться</a>
+        <a href="{% url 'login' %}">Sign in</a>
+        <a href="{% url 'user-registration' %}">Register</a>
     </p>
     {% endif %}
 </div>
+
     <h1>Идея проекта</h1>
     <h2>MySkills</h2>
     <pre>Сайт, где каждый может следить за своим прогрессом по получению навыков
@@ -52,10 +54,10 @@ TODO:
         - оптимизировать запросы
         - прикрутить PG
         - добавить красоты (boostrap?) https://docs.djangoproject.com/en/3.2/ref/templates/language/
-        - добавить авторизацию, пермишены
-        - добавить авторизацию через соцсети
+        - добавить авторизацию через соцсети https://realpython.com/django-user-management/
         - добавить возможность размещать скиллы как личные/публичные
         - публичные скиллы видны в открытом списке всех скиллов
+        - лучше разобраться с пермишенами https://realpython.com/manage-users-in-django-admin/
 
     </pre>
 </body>

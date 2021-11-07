@@ -15,9 +15,9 @@ Including another URLconf
 """
 from django.conf.urls import url
 from django.contrib import admin
-from django.urls import path, include
+from django.urls import path, include, reverse_lazy
 from django.views.generic import TemplateView
-from django.contrib.auth.views import LoginView, LogoutView
+from django.contrib.auth.views import LoginView, LogoutView, PasswordChangeView, PasswordChangeDoneView
 
 import skillprofile.views
 from myskills.settings import DEBUG
@@ -30,9 +30,15 @@ urlpatterns = [
     path('admin/', admin.site.urls),
 
     # auth
-    path('accounts/login/', LoginView.as_view(), name='login'),
-    path('accounts/logout/', LogoutView.as_view(), name='logout'),
+    url(r"^accounts/", include("django.contrib.auth.urls")),
     path('accounts/registration/', UserCreateView.as_view(), name='user-registration'),
+    path('accounts/password-change/', PasswordChangeView.as_view(
+        template_name='registration/custom_password_change_form.html',
+        success_url=reverse_lazy("password-change-done"),
+    ), name="password-change"),
+    path('accounts/password-change/done', PasswordChangeDoneView.as_view(
+        template_name='registration/custom_password_change_done.html'), name="password-change-done"),
+
 
     # user about
     # path('<username>/details', userauth.views.UserDetail.as_view(), name='user-detail'),

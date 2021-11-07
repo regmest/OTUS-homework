@@ -1,20 +1,18 @@
-{% load static %}
-<html lang="en">
-<head>
-    <title>User Register</title>
-</head>
-<body>
+{% extends 'base.html' %}
 
-<main class="container">
-    <div class="bg-light p-5 rounded">
-        <form method="post" enctype="multipart/form-data">
-            {% csrf_token %}
-            {{ form.as_p }}
-            <hr>
-            <button class="btn btn-primary" type="submit">Сохранить</button>
-        </form>
-    </div>
-</main>
+{% block title %}User Register{% endblock %}
 
-</body>
-</html>
+{% block content %}
+
+<h2>Register</h2>
+
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <hr>
+    <button class="btn btn-primary" type="submit">Save</button>
+</form>
+
+<p><a href="{% url 'main-page' %}">Back to Main Page</a></p>
+
+{% endblock %}
