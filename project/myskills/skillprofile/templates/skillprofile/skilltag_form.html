@@ -2,18 +2,15 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>New skill</title>
+    <title>Skill tag</title>
 </head>
 <body>
 
-<h1>New skill!</h1>
+<h1>Skill tag</h1>
 
 <form method="post">
     {% csrf_token %}
     {{ form.as_p }}
-
-    <p>No suitable tags? <a href="{% url 'skill-tag-create' %}">Create new!</a></p>
-
     <input type="submit" value="Save">
 </form>
 

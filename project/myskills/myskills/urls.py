@@ -24,9 +24,9 @@ from myskills.settings import DEBUG
 from userauth.views import UserCreateView
 
 urlpatterns = [
+    # main
     path('', TemplateView.as_view(template_name='skillprofile/index.html'), name='main-page'),
     path('about/', TemplateView.as_view(template_name='skillprofile/index.html'), name='about'),
-
     path('admin/', admin.site.urls),
 
     # auth
@@ -38,16 +38,24 @@ urlpatterns = [
     # path('<username>/details', userauth.views.UserDetail.as_view(), name='user-detail'),
     # path('<username>'/update/', userauth.views.
 
-    # skills list & details
+    # skills
     path('skills/', skillprofile.views.SkillList.as_view(), name='all-skills'),
     path('skills/create/', skillprofile.views.SkillCreate.as_view(), name='skill-create'),
     url(r'^skills/(?P<slug>[\w.-]+)/details/$', skillprofile.views.SkillDetail.as_view(), name='skill-detail'),
-    url(r'^skills/(?P<slug>[\w.-]+)/update/$', skillprofile.views.SkillUpdate.as_view(), name='skill-update'),
 
-    # user skills list & details
-    path('<username>/skills/', skillprofile.views.UserSkillList.as_view(), name='user-skills'),
+    # skill tags
+    path('skills/tags/', skillprofile.views.SkillTagList.as_view(), name='all-skill-tags'),
+    path('skills/tags/create/', skillprofile.views.SkillTagCreate.as_view(), name='skill-tag-create'),
+    url(r'^skills/tags/(?P<slug>[\w.-]+)/update/$', skillprofile.views.SkillTagUpdate.as_view(), name='skill-tag-update'),
+
+    # user skills
+    path('<username>/skills/', skillprofile.views.UserSkillList.as_view(), name='all-user-skills'),
     url(r'^(?P<username>[\w.-]+)/skills/(?P<slug>[\w.-]+)/details/$', skillprofile.views.UserSkillDetail.as_view(),
         name='user-skill-detail'),
+    url(r'^(?P<username>[\w.-]+)/skills/(?P<slug>[\w.-]+)/update/$', skillprofile.views.SkillUpdate.as_view(),
+        name='user-skill-update'),
+    url(r'^(?P<username>[\w.-]+)/skills/(?P<slug>[\w.-]+)/delete/$', skillprofile.views.SkillDelete.as_view(),
+        name='user-skill-delete'),
 
 ]
 

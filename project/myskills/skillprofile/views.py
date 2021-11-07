@@ -2,18 +2,54 @@ import string
 import random
 
 from django.contrib.auth.models import User
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.http import Http404
 from django.shortcuts import get_object_or_404
 from django.urls import reverse_lazy, reverse
 from slugify import slugify as py_slugify
 from django.utils.translation import gettext
-from django.views.generic import ListView, DetailView, CreateView, UpdateView
+from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 
-from skillprofile.models import Skill
+from skillprofile.models import Skill, SkillTag
+
+# TODO
+
+# TODO Frontend
+#   - плашка со всеми кнопками сверху
 
 
-def rand_slug():
-    return ''.join(random.choice(string.ascii_letters + string.digits) for _ in range(3))
+def random_slug(length: int):
+    return ''.join(random.choice(string.ascii_letters + string.digits) for _ in range(length))
+
+
+class SkillTagList(ListView):
+    model = SkillTag
+
+
+class SkillTagCreate(LoginRequiredMixin, CreateView):
+    model = SkillTag
+    fields = ('name',)
+    success_url = reverse_lazy('all-skill-tags')
+
+    def form_valid(self, form):
+        form.instance.author_user = self.request.user
+        form.instance.slug = py_slugify(form.instance.name + random_slug(3))
+        return super().form_valid(form)
+
+
+class SkillTagUpdate(UserPassesTestMixin, UpdateView):
+    model = SkillTag
+    fields = ('name',)
+    success_url = reverse_lazy('all-skill-tags')
+
+    def form_valid(self, form):
+        form.instance.author_user = self.request.user
+        if not self.kwargs['slug']:
+            form.instance.slug = py_slugify(form.instance.name + "-" + random_slug(3))
+        return super().form_valid(form)
+
+    def test_func(self):
+        return self.request.user.is_superuser
 
 
 class SkillList(ListView):
@@ -33,54 +69,66 @@ class SkillDetail(DetailView):
     # TODO напротив скиллов, которые юзер уже изучает тег "learning"
 
 
-class SkillCreate(CreateView):
+class SkillCreate(LoginRequiredMixin, CreateView):
     model = Skill
-    success_url = reverse_lazy('all-skills')  # TODO возвращать туда, откуда create вызывался (all-skills/user-skills)
     fields = ('name', 'status', 'description', 'tag')
 
     def form_valid(self, form):
         form.instance.author_user = self.request.user
-        form.instance.slug = py_slugify(form.instance.name + "-" + rand_slug())
+        form.instance.slug = py_slugify(form.instance.name + "-" + random_slug(3))
         return super().form_valid(form)
 
+    def get_success_url(self):
+        return reverse('user-skill-detail', kwargs={'slug': self.object.slug, 'username': self.request.user})
 
-class SkillUpdate(UpdateView):
+
+class SkillUpdate(UserPassesTestMixin, UpdateView):
     model = Skill
     fields = ('name', 'status', 'description', 'tag')
 
     def get_success_url(self):
-        return reverse('user-skill-detail', kwargs={'slug': self.kwargs['slug'], 'username': self.request.user})
+        return reverse('user-skill-detail', kwargs={'slug': self.object.slug, 'username': self.request.user})
 
     def form_valid(self, form):
         form.instance.author_user = self.request.user
-        if not self.kwargs['slug']:
-            form.instance.slug = py_slugify(form.instance.name + "-" + rand_slug())
+        if not self.object.slug:
+            form.instance.slug = py_slugify(form.instance.name + "-" + random_slug(3))
         return super().form_valid(form)
+
+    def test_func(self):
+        return self.request.user.username == self.kwargs['username'] \
+               or self.request.user.is_superuser
+
+
+class SkillDelete(UserPassesTestMixin, DeleteView):
+    model = Skill
+
+    def get_success_url(self):
+        return reverse('all-user-skills', kwargs={'username': self.request.user})
+
+    def test_func(self):
+        return self.request.user.username == self.kwargs['username'] \
+               or self.request.user.is_superuser
 
 
 class UserSkillList(ListView):
-    """ Skill info for particular user """
+    """ Skill info for a particular user """
     model = Skill
     template_name = 'skillprofile/userskill_list.html'
-    # TODO добавить кнопку Edit
 
     def get_queryset(self):
-        # показываем скиллы определенного в урле юзера
-        # https://docs.djangoproject.com/en/3.2/topics/class-based-views/generic-display/
         self.username = get_object_or_404(User, username=self.kwargs['username'])
         user_skills = Skill.objects.select_related('author_user').filter(author_user__username=self.username)
-        # TODO проверить на наличие лишних запросов, оптимизировать
         return user_skills
 
     def get_context_data(self, **kwargs):
-        # https://docs.djangoproject.com/en/3.2/topics/class-based-views/generic-display/
         context = super().get_context_data(**kwargs)
         context['username'] = self.username
         return context
 
 
 class UserSkillDetail(DetailView):
-    """ Full skill info for user """
+    """ Full skill info for a user """
     # TODO diary
     model = Skill
     template_name = 'skillprofile/userskill_detail.html'
@@ -110,7 +158,7 @@ class UserSkillDetail(DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['username'] = self.username
+        context['username'] = str(self.username)
         return context
 
 

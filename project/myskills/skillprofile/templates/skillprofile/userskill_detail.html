@@ -9,9 +9,12 @@
 
   <p> Status: {{ object.status }}</p>
   <p> Description: {{ object.description }}</p>
-
-  <p><a href="{% url 'skill-update' object.slug %}">Edit</a></p>
-  <p><a href="{% url 'user-skills' username %}">Back to {{ username }}'s skills list</a></p>
-
+  <div>
+    {% if user.username == username or user.is_superuser %}
+      <p><a href="{% url 'user-skill-update' username object.slug %}">Edit</a></p>
+      <p><a href="{% url 'user-skill-delete' username object.slug %}">Delete</a></p>
+    {% endif %}
+  </div>
+  <p><a href="{% url 'all-user-skills' username %}">Back to {{ username }}'s skills list</a></p>
 </body>
 </html>
