@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+
+{% block title %}User Register{% endblock %}
+
+{% block content %}
+
+<h2>Register</h2>
+
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <hr>
+    <button class="btn btn-primary" type="submit">Save</button>
+</form>
+
+<p><a href="{% url 'main-page' %}">Back to Main Page</a></p>
+
+{% endblock %}

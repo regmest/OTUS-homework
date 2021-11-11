@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>User skills</title>
+</head>
+<body>
+    <h1>{{ username }} skills</h1>
+    <ul>
+        {% for userskill in object_list %}
+            <li>
+                <a href="{{ userskill.get_userskill_details_url }}">
+                    {{ userskill.name }}
+                </a>
+            </li>
+        {% endfor %}
+    </ul>
+
+<a href="{% url 'skill-create' %}">Create new skill</a>
+
+</body>
+</html>

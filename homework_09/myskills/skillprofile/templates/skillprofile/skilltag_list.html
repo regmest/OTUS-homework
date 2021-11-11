@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>All skill tags</title>
+</head>
+<body>
+<h1>Skill tags</h1>
+<h3>List of all skill tags</h3>
+  {% for tag in object_list %}
+    <ul>
+      <li>
+          {{ tag.name }}
+          {% if user.is_superuser %}
+            <a href="{% url 'skill-tag-update' tag.slug %}">edit</a>
+          {% endif %}
+      </li>
+    </ul>
+  {% endfor %}
+
+<a href="{% url 'skill-tag-create' %}">Create new skill tag</a>
+
+</body>
+</html>
