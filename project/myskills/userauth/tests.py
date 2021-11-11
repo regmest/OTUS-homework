@@ -1,8 +1,7 @@
 from django.contrib.auth import get_user_model
 from django.test import TestCase
 from django.urls import reverse
-from selenium.webdriver import Firefox, Chrome
-
+from selenium.webdriver import Firefox
 
 
 class TestUserauth(TestCase):
@@ -66,7 +65,7 @@ class TestUserauthWithWebdriver(TestCase):
     def setUp(self):
         self.driver = Firefox(executable_path='/Users/reginameshkova/Desktop/mine/geckodriver')
 
-    def test_signup_fire(self):
+    def test_login_title(self):
         self.driver.get("http://localhost:8000/accounts/login/")
         self.assertEqual("Myskills" in self.driver.title, True)
 
