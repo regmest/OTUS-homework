@@ -110,9 +110,3 @@ class TestSkillprofileViewsPermissions(TestCase):
         self.client.login(**self.super_user_data)
         response = self.client.get(reverse('skill-tag-update', kwargs={'slug': self.user1_tag.slug}))
         self.assertEqual(response.status_code, 200)
-
-
-        # @classmethod
-        # def tearDownClass(cls):
-        #     ...
-        #     super().tearDownClass()
