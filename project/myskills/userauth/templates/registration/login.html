@@ -6,13 +6,16 @@
 <p>Your username and password didn't match. Please try again.</p>
 {% endif %}
 
+
 <h2>Login</h2>
 
+<div class="container p-3 my-3 border">
 <form method="post">
     {% csrf_token %}
     {{ form.as_p }}
     <input type="submit" value="Login">
 </form>
+</div>
 
 <p></p><a href="/">Main page</a></p>
 

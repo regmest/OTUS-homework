@@ -1,23 +1,54 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>User skill details</title>
-</head>
+{% extends 'base.html' %}
+
+{% block title %}Myskills - My Skill Details{% endblock %}
+
+{% block content %}
+
 <body>
-  <h1>{{ username }} skills: {{ object.name }}</h1>
 
-  <p> Status: {{ object.status }}</p>
-  <p> Description: {{ object.description }}</p>
-  <div>
-    {% if user.username == username or perms.skillprofile.change_skill %}
-      <button><a href="{% url 'user-skill-update' username object.slug %}">Edit</a></button>
-    {% endif %}
-    {% if user.username == username or perms.skillprofile.delete_skill %}
-      <button><a href="{% url 'user-skill-delete' username object.slug %}">Delete</a></button>
-    {% endif %}
+  <div class="my-3"><h1>My skill</h1></div>
+  <hr class="mt-0 mb-4">
+
+  <div class="card mb-3">
+    <h5 class="card-header">Skill: {{ object.name | capfirst }}</h5>
+    <div class="card-body">
+
+        {% if object.status %}
+      <p class="card-text"><strong>Status:</strong> {{ object.status }}</p>
+        {% endif %}
+
+        {% if object.description %}
+          <h6 class="card-title">Description</h6>
+          <p class="card-text">{{ object.description | capfirst }}</p>
+        {% else %}
+          <p class="card-text">No description :(</p>
+        {% endif %}
+
+        {% if tags %}
+          <p class="card-text">
+            {% for tag in tags %}
+                <span class="badge bg-warning text-dark">{{ tag.name | capfirst }}</span>
+            {% endfor %}
+          </p>
+        {% endif %}
+
+        {% if user.username == username or perms.skillprofile.change_skill %}
+          <a href="{% url 'user-skill-update' username object.slug %}" class="btn btn-primary">Edit</a>
+        {% endif %}
+        {% if user.username == username or perms.skillprofile.delete_skill %}
+          <a href="{% url 'user-skill-delete' username object.slug %}" class="btn btn-danger">Delete</a>
+        {% endif %}
+
+    </div>
   </div>
-  <p><a href="{% url 'all-user-skills' username %}">Back to {{ username }}'s skills list</a></p>
-</body>
-</html>
 
+  <div class="my-3">
+    <a href="{% url 'all-user-skills' username %}" class="btn btn-primary">
+      Back to {{ username }}'s skills list
+    </a>
+  </div>
+
+
+</body>
+
+{% endblock %}

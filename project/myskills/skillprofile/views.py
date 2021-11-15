@@ -61,6 +61,16 @@ class SkillList(ListView):
 class SkillDetail(DetailView):
     """ General skill info """
     model = Skill
+
+    def get_tags(self):
+        self.tags = SkillTag.objects.filter(skill__slug=self.kwargs['slug']).only('name')
+        return self.tags
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['tags'] = self.get_tags()
+        return context
+
     # TODO добавить кнопку "хочу изучать" рядом с не моими скиллами
     # TODO вывести теги в ряд
     # TODO напротив скиллов, которые юзер уже изучает тег "learning"
@@ -76,7 +86,7 @@ class SkillCreate(LoginRequiredMixin, CreateView):
         return super().form_valid(form)
 
     def get_success_url(self):
-        return reverse('user-skill-detail', kwargs={'slug': self.object.slug, 'username': self.request.user})
+        return reverse('user-skill-detail', kwargs={'slug': self.object.slug, 'username': self.request.user.username})
 
 
 class SkillUpdate(UserPassesTestMixin, UpdateView):
@@ -120,13 +130,12 @@ class UserSkillList(ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['username'] = self.username
+        context['username'] = str(self.username)
         return context
 
 
 class UserSkillDetail(DetailView):
     """ Full skill info for a user """
-    # TODO diary
     model = Skill
     template_name = 'skillprofile/userskill_detail.html'
 
@@ -153,9 +162,14 @@ class UserSkillDetail(DetailView):
                           {'verbose_name': queryset.model._meta.verbose_name})
         return obj
 
+    def get_tags(self):
+        self.tags = SkillTag.objects.filter(skill__slug=self.kwargs['slug']).only('name')
+        return self.tags
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['username'] = str(self.username)
+        context['tags'] = self.get_tags()
         return context
 
 

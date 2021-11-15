@@ -1,14 +1,38 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Skill Details</title>
-</head>
-<body>
-  <h1>{{ object.name }}</h1>
-      {{ object.description }}
+{% extends 'base.html' %}
 
-  <p><a href="{% url 'all-skills' %}">Back to list</a></p>
+{% block title %}Myskills - Skill Details{% endblock %}
+
+{% block content %}
+
+<body>
+
+<div class="my-3"><h1>Skill Details</h1></div>
+<hr class="mt-0 mb-4">
+
+    <div class="card mb-3">
+      <h5 class="card-header">Skill: {{ object.name | capfirst }}</h5>
+      <div class="card-body">
+        <h6 class="card-title">Description</h6>
+
+          {% if object.description %}
+            <p class="card-text">{{ object.description | capfirst }}</p>
+          {% else %}
+            <p class="card-text">No description :(</p>
+          {% endif %}
+
+          {% if tags %}
+            <p class="card-text">
+              {% for tag in tags %}
+                  <span class="badge bg-warning text-dark">{{ tag.name | capfirst }}</span>
+              {% endfor %}
+            </p>
+          {% endif %}
+
+      </div>
+    </div>
+
+  <p><a href="{% url 'all-skills' %}" class="btn btn-primary" >Back to list</a></p>
 
 </body>
-</html>
+
+{% endblock %}

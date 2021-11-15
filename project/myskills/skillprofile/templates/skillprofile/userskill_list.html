@@ -1,22 +1,30 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>User skills</title>
-</head>
-<body>
-    <h1>{{ username }} skills</h1>
-    <ul>
-        {% for userskill in object_list %}
-            <li>
-                <a href="{{ userskill.get_userskill_details_url }}">
-                    {{ userskill.name }}
-                </a>
-            </li>
-        {% endfor %}
-    </ul>
+{% extends 'base.html' %}
 
-<a href="{% url 'skill-create' %}">Create new skill</a>
+{% block title %}Myskills - User skills{% endblock %}
+
+{% block content %}
+
+<body>
+
+<div class="my-3"><h1>
+    {% if user.username == username %}
+        My skills
+    {% else %}
+        {{ username | capfirst}} skills
+    {% endif %}
+</h1></div>
+<hr class="mt-0 mb-4">
+
+{% for userskill in object_list %}
+<ul>
+    <li>
+        <a href="{{ userskill.get_userskill_details_url }}">{{ userskill.name | capfirst }}</a>
+    </li>
+</ul>
+{% endfor %}
+
+<a href="{% url 'skill-create' %}" class="btn btn-primary">Create new skill</a>
 
 </body>
-</html>
+
+{% endblock %}

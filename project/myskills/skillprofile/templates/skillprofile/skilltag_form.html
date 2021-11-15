@@ -1,18 +1,22 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Skill tag</title>
-</head>
+{% extends 'base.html' %}
+
+{% block title %}Myskills - New tag{% endblock %}
+
+{% block content %}
+
 <body>
 
-<h1>Skill tag</h1>
+<div class="my-3"><h1>New skill tag! </h1></div>
+<hr class="mt-0 mb-4">
 
 <form method="post">
+
     {% csrf_token %}
     {{ form.as_p }}
-    <input type="submit" value="Save">
+
+    <input class="btn btn-primary" type="submit" value="Save">
 </form>
 
 </body>
-</html>
+
+{% endblock %}

@@ -20,8 +20,15 @@ from django.views.generic import TemplateView
 from django.contrib.auth.views import LoginView, LogoutView, PasswordChangeView, PasswordChangeDoneView
 
 import skillprofile.views
+import userauth.views
 from myskills.settings import DEBUG
 from userauth.views import UserCreateView
+
+
+# TODO
+#   на странице пользователя возможность заполнить about
+#   на странице пользователя карточки с скиллами по статусам
+
 
 urlpatterns = [
     # main
@@ -39,10 +46,9 @@ urlpatterns = [
     path('accounts/password-change/done', PasswordChangeDoneView.as_view(
         template_name='registration/custom_password_change_done.html'), name="password-change-done"),
 
-
     # user about
-    # path('<username>/details', userauth.views.UserDetail.as_view(), name='user-detail'),
-    # path('<username>'/update/', userauth.views.
+    url(r'^accounts/(?P<username>[\w.-]+)/$', userauth.views.UserDetail.as_view(), name='user-detail'),
+    url(r'^accounts/(?P<username>[\w.-]+)/update/$', userauth.views.UserUpdate.as_view(), name='user-update'),
 
     # skills
     path('skills/', skillprofile.views.SkillList.as_view(), name='all-skills'),
@@ -56,11 +62,11 @@ urlpatterns = [
 
     # user skills
     path('<username>/skills/', skillprofile.views.UserSkillList.as_view(), name='all-user-skills'),
-    url(r'^(?P<username>[\w.-]+)/skills/(?P<slug>[\w.-]+)/details/$', skillprofile.views.UserSkillDetail.as_view(),
+    url(r'^accounts/(?P<username>[\w.-]+)/skills/(?P<slug>[\w.-]+)/details/$', skillprofile.views.UserSkillDetail.as_view(),
         name='user-skill-detail'),
-    url(r'^(?P<username>[\w.-]+)/skills/(?P<slug>[\w.-]+)/update/$', skillprofile.views.SkillUpdate.as_view(),
+    url(r'^accounts/(?P<username>[\w.-]+)/skills/(?P<slug>[\w.-]+)/update/$', skillprofile.views.SkillUpdate.as_view(),
         name='user-skill-update'),
-    url(r'^(?P<username>[\w.-]+)/skills/(?P<slug>[\w.-]+)/delete/$', skillprofile.views.SkillDelete.as_view(),
+    url(r'^accounts/(?P<username>[\w.-]+)/skills/(?P<slug>[\w.-]+)/delete/$', skillprofile.views.SkillDelete.as_view(),
         name='user-skill-delete'),
 
 ]

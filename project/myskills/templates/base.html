@@ -1,0 +1,138 @@
+{% load static %}
+
+<link
+   rel="stylesheet"
+   type="text/css"
+   href="{% static 'css/bootstrap.min.css' %}"
+/>
+
+<!doctype html>
+<html lang="en">
+
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>
+      {% block title %}Myskills{% endblock %}
+    </title>
+  </head>
+
+  <header>
+
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="{% url 'main-page' %}">
+      <img src="{% static 'img/img.png' %}" alt="" width="25" height="25" class="d-inline-block align-text-top"> MySkills
+    </a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+
+        <li class="nav-item">
+          <a class="nav-link" aria-current="page" href="{% url 'all-skills' %}">Skills</a>
+        </li>
+
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'all-skill-tags' %}">Tags</a>
+        </li>
+
+        {% if user.is_authenticated %}
+          <li class="nav-item">
+            <a class="nav-link" aria-current="page" href="{% url 'user-detail' user.username %}">My profile</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" aria-current="page" href="{% url 'all-user-skills' user.username %}">My skills</a>
+          </li>
+        {% else %}
+          <li class="nav-item">
+            <a class="nav-link disabled">My Profile</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link disabled">My Skills</a>
+          </li>
+        {% endif %}
+
+      </ul>
+
+      <nav class="navbar navbar-light bg-light">
+          <div class="container-fluid">
+            <span class="navbar-text">
+                  Hello, {{ user.username | capfirst | default:'Guest' }}!
+                  {% if user.is_authenticated %}
+                      <a href="{% url 'logout' %}">Log out</a>
+                  {% else %}
+                      Please
+                          <a href="{% url 'login' %}"><mark>Sign in</mark></a> or
+                          <a href="{% url 'user-registration' %}"><mark>Register</mark></a>
+                  {% endif %}
+            </span>
+          </div>
+      </nav>
+
+    </div>
+  </div>
+</nav>
+
+    {% block header %}{% endblock %}
+
+  </header>
+
+  <body>
+
+    <div class="container">
+      <div class="row justify-content-center">
+        <div class="col-8">
+          {% block content %}
+          {% endblock %}
+        </div>
+      </div>
+    </div>
+
+  </body>
+
+<footer class="bg-white">
+    <div class="container py-5">
+      <div class="row py-4">
+        <div class="col-lg-4 col-md-6 mb-4 mb-lg-0"><img src="{% static 'img/img.png' %}" alt="" width="60" class="mb-3">
+          <p class="font-italic text-muted">Website where everyone can track <br> their skill progress.</p>
+        </div>
+        <div class="col-lg-2 col-md-6 mb-4 mb-lg-0">
+          <h6 class="text-uppercase font-weight-bold mb-4">Skills</h6>
+          <ul class="list-unstyled mb-0">
+            <li class="mb-2"><a href="{% url 'all-skills' %}" class="text-muted">Skills</a></li>
+            <li class="mb-2"><a href="{% url 'all-skill-tags' %}" class="text-muted">Tags</a></li>
+          </ul>
+        </div>
+        <div class="col-lg-2 col-md-6 mb-4 mb-lg-0">
+          <h6 class="text-uppercase font-weight-bold mb-4">Account</h6>
+          <ul class="list-unstyled mb-0">
+            <li class="mb-2"><a href="{% url 'login' %}" class="text-muted">Login</a></li>
+            <li class="mb-2"><a href="{% url 'user-registration' %}" class="text-muted">Register</a></li>
+            <li class="mb-2"><a href="{% url 'password-change' %}" class="text-muted">Change password</a></li>
+          </ul>
+        </div>
+        <div class="col-lg-4 col-md-6 mb-lg-0">
+          <h6 class="text-uppercase font-weight-bold mb-4">Newsletter</h6>
+          <p class="text-muted mb-4">Keep up to date with the latest news.</p>
+          <div class="p-1 rounded border">
+            <div class="input-group">
+              <input type="email" placeholder="Enter your email address" aria-describedby="button-addon1" class="form-control border-0 shadow-0">
+              <div class="input-group-append">
+                <button id="button-addon1" type="submit" class="btn btn-link"><i class="fa fa-paper-plane"></i></button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="bg-light py-4">
+      <div class="container text-center">
+        <p class="text-muted mb-0 py-2">© 2021 OTUS Python.Basic </p>
+      </div>
+    </div>
+  </footer>
+
+</html>

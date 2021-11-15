@@ -1,0 +1,58 @@
+{% extends 'base.html' %}
+
+{% block title %}Myskills - User Info{% endblock %}
+
+{% block content %}
+
+<body>
+
+<div class="my-3"><h1>
+    {% if user.username == user_object.username %}
+        My Info
+    {% else %}
+        {{ user_object.username | capfirst }} Info
+    {% endif %}
+</h1></div>
+<hr class="mt-0 mb-4">
+
+<div class="container">
+  <div class="row">
+    <div class="col-sm-2"><h6>Username</h6></div>
+    <div class="col-sm-2">{{ user_object.username }}</div>
+  </div>
+  {% if object.first_name %}
+  <div class="row">
+    <div class="col-sm-2"><h6>First name</h6></div>
+    <div class="col-sm-2">{{ user_object.first_name }}</div>
+  </div>
+  {% endif %}
+  {% if object.last_name %}
+  <div class="row">
+    <div class="col-sm-2"><h6>Last name</h6></div>
+    <div class="col-sm-2">{{ user_object.last_name }}</div>
+  </div>
+  {% endif %}
+  {% if object.last_name %}
+  <div class="row">
+    <div class="col-sm-2"><h6>Email</h6></div>
+    <div class="col-sm-2">{{ user_object.email }}</div>
+  </div>
+  {% endif %}
+  {% if user_object.userinfo.about %}
+  <div class="row">
+    <div class="col-sm-2"><h6>About</h6></div>
+    <div class="col-sm-9">{{ user_object.userinfo.about }}</div>
+  </div>
+  {% endif %}
+</div>
+
+<div class="my-3">
+  {% if user.username == user_object.username or perms.userauth.change_user %}
+    <a href="{% url 'user-update' user_object.username %}" class="btn btn-primary">Edit Profile</a>
+    <a href="{% url 'password-change' %}" class="btn btn-primary">Change Password</a>
+  {% endif %}
+</div>
+
+</body>
+
+{% endblock %}

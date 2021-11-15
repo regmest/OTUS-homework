@@ -1,16 +1,21 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Skill delete</title>
-</head>
+{% extends 'base.html' %}
+
+{% block title %}Myskills - Delete skill{% endblock %}
+
+{% block content %}
+
 <body>
 
-<h1>Sure to delete skill "{{ object.name }}"?</h1>
+<div class="my-3"><h1>Sure to delete skill "{{ object.name }}"?</h1></div>
+
 <form method="post">
     {% csrf_token %}
-    <input type="submit" value="yes">
+
+    <input class="btn btn-primary" type="submit" value="Yes">
+    <a href="{% url 'user-skill-detail' user.username object.slug %}" class="btn btn-secondary">Cancel</a>
+
 </form>
-<a href="{% url 'main-page' %}">Cancel</a>
+
 </body>
-</html>
+
+{% endblock %}

@@ -1,64 +1,74 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>About project</title>
-</head>
-<body leftmargin="50" topmargin="50">
-<div>
-    Hello, {{ user.username|default:'Guest' }}!
-    {% if user.is_authenticated %}
-    <p>
-        <a href="{% url 'logout' %}">Log out</a>
-        <a href="{% url 'password-change' %}">Change password</a>
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block title %}Myskills - Main{% endblock %}
+
+{% block content %}
+
+<h1 class="mt-2">Myskills</h1>
+<hr class="mt-0 mb-4">
+
+<br><h1 class="display-6">Website where everyone can track their skill progress.</h1><br>
+
+<h3>Used tools:</h3>
+
+<div class="row row-cols-1 row-cols-md-2 g-4">
+ <div class="col">
+  <div class="card mb-3 h-100">
+    <img src="{% static 'img/django.png' %}" alt="" width="80" height="75">
+   <div class="card-body">
+    <h5 class="card-title">Django</h5>
+    <p class="card-text">
+        <ul>
+            <li>Models links: OneToOne (User<->UserInfo), OneToMany (User<->Skill), ManyToMany (Skill<->Tag)</li>
+            <li>ORM (for several views)</li>
+            <li>CBV, generics, forms</li>
+            <li>Permissions: UserPassesTestMixin, LoginRequiredMixin</li>
+            <li>Tests</li>
+            <li>Debug-tool-bar</li>
+        </ul>
     </p>
-    {% else %}
-    <p>
-        Welcome, please log in.
-        <a href="{% url 'login' %}">Sign in</a>
-        <a href="{% url 'user-registration' %}">Register</a>
+   </div>
+  </div>
+ </div>
+ <div class="col">
+  <div class="card mb-3 h-100">
+    <img src="{% static 'img/bootstrap.png' %}" alt="" width="80" height="75">
+   <div class="card-body">
+    <h5 class="card-title">Boostrap</h5>
+    <p class="card-text">
+        <ul>
+            <li>JS and CSS are added to static and available to all apps.</li>
+            <li>Base template has navbar and footer.</li>
+            <li>Cards with used tools on the main page.</li>
+        </ul>
     </p>
-    {% endif %}
+   </div>
+  </div>
+ </div>
+  <div class="col">
+    <div class="card mb-3 h-100">
+       <img src="{% static 'img/docker.png' %}" alt="" width="70" height="70">
+      <div class="card-body">
+        <h5 class="card-title">Docker</h5>
+        <p class="card-text">
+            Project is dockerized, application and database are deployed on the same network using docker-compose.
+        </p>
+      </div>
+    </div>
+  </div>
+ <div class="col">
+  <div class="card mb-3 h-100">
+    <img src="{% static 'img/postgres.png' %}" alt="" width="80" height="75">
+   <div class="card-body">
+    <h5 class="card-title">Postgres</h5>
+    <p class="card-text">
+        Postgres is project database.
+    </p>
+   </div>
+  </div>
+ </div>
 </div>
 
-    <h1>Идея проекта</h1>
-    <h2>MySkills</h2>
-    <pre>Сайт, где каждый может следить за своим прогрессом по получению навыков
-
-Основное:
-    - На странице профиля будут размещены скиллы, над которыми человек работает
-    - Скилл имеет бар заполнения и статус (not started/in progress/finished/failed)
-    - Скиллы могут иметь родительские и дочерние скиллы (пример: скилл "Научиться рисовать" имеет подскилл "Научиться рисовать акварелью")
-    - Скиллы имеют теги направлений (пример: "Научиться рисовать" имеет теги "Творчество" и "Искусство")
-    - Пользователь может получать ачивки (медальки)
-    - На странице скилла пользователь может добавлять комментарии о своих успехах
-    - Пользователь может добавлять друзей
-    - Можно оставлять комментарии на страницах пользователей
-
-
-Реализация:
-        1. При авторизации пользователь попадает на свою страницу
-        2. Страница пользователя:
-            - фото (emoji)
-            - скиллы пользователя
-        3. Страница скилла конкретного пользователя
-            - картинка (emoji)
-            - бар заполнения
-            - комментарии
-            - прогресс рассчитывается так:
-                    пользователь задает количество тем, которые нужно пройти
-                    каждую пройденную тему пользователь отмечает
-                    progress_percent = completed / all
-
-TODO:
-        - оптимизировать запросы
-        - прикрутить PG
-        - добавить красоты (boostrap?) https://docs.djangoproject.com/en/3.2/ref/templates/language/
-        - добавить авторизацию через соцсети https://realpython.com/django-user-management/
-        - добавить возможность размещать скиллы как личные/публичные
-        - публичные скиллы видны в открытом списке всех скиллов
-
-
-    </pre>
-</body>
-</html>
+{% endblock %}
